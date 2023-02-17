@@ -1,0 +1,92 @@
+Q1:
+grammar mC;
+
+program : declist EOF ;
+
+declist : decl declist | decl ;
+
+decl : vardecl | funcdecl ;
+
+vardecl : typ idlist SM ;
+
+idlist : ID ids | ID ;
+
+ids : CM ID ids | ;
+
+typ : 'int' | 'float' ;
+
+ID : [a-zA-Z_][a-zA-Z0-9_]* ;
+
+CM : ',' ;
+
+SM : ';' ;
+
+LB : '(' ;
+
+RB : ')' ;
+
+LCB : '{' ;
+
+RCB : '}' ;
+
+
+Q2:
+
+
+funcdecl : typ ID paradecl body ;
+
+paradecl: LB paralist RB ;
+
+paralist : para paras | ;
+
+paras : SM para paras | ;
+
+para : typ idlist ;
+
+body : LCB bodylist RCB ;
+
+bodylist : bodydecl bodylist | ;
+
+bodydecl : vardecl | stmt ;
+
+
+Q3:
+
+stmt : (assignstmt | callstmt | returnstmt) SM ;
+
+assignstmt : ID '=' expr ;
+
+callstmt : ID LB exprlist RB ;
+
+exprlist : expr exprs | ;
+
+exprs : CM expr exprs | ;
+
+returnstmt : 'return' expr ;
+
+Q4:
+
+expr: expr1 ADDOP expr | expr1 ;
+
+expr1: expr2 SUBOP expr2 | expr2 ;
+
+expr2: expr2 (MULOP | DIVOP) operand | operand ;
+
+operand: INTLIT | FLOATLIT | ID | callstmt | subexpr ;
+
+subexpr: LB expr RB ;
+
+ADDOP: '+' ;
+
+SUBOP: '-' ;
+
+MULOP: '*' ;
+
+DIVOP: '/' ;
+
+INTLIT : '0' | [1-9][0-9]* ;
+
+FLOATLIT : INTLIT '.' INTLIT ;
+
+
+

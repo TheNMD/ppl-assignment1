@@ -1,0 +1,20 @@
+Q1
+fragment Ip: '25'[0-5] | '2'[0-4][0-9] | '1'[0-9][0-9] | [1-9][0-9]| [0-9] ;
+String: Ip'.'Ip'.'Ip'.'Ip ;
+
+Q2
+ID: [a-z][a-z0-9]* ;
+
+Q3
+fragment Digit: [0-9]+ ;
+Real: Digit ('.' Digit | [eE][+-]? Digit | '.' Digit [eE][+-]? Digit) ;
+
+Q4
+fragment SingleQuote: '\'' ;
+fragment InvSingleQuote: ~ '\'' ;
+String: SingleQuote (SingleQuote SingleQuote | InvSingleQuote)* SingleQuote ;
+
+Q5:
+fragment Digit: [0-9];
+fragment NonZeroDigit: [1-9];
+INT: '0' | NonZeroDigit (Digit | '_')* {self.text = self.text.replace('_','')} ;
