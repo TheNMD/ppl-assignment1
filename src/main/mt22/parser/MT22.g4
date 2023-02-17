@@ -53,7 +53,7 @@ FLOAT : INT DECIMAL? EXPONENT? ;
 
 DECIMAL : '.' [0-9]* ;
 
-EXPONENT : [eE][+-]? [0-9]+ ;
+EXPONENT : [eE] [+-]? [0-9]+ ;
 
 BOOLEAN : 'true' | 'false' ;
 
