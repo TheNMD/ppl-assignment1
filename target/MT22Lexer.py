@@ -8,7 +8,8 @@ else:
     from typing.io import TextIO
 
 
-from lexererr import *
+	from lexererr import *;
+	package 2052932;
 
 
 

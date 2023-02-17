@@ -1,7 +1,8 @@
 grammar MT22;
 
 @lexer::header {
-from lexererr import *
+	from lexererr import *;
+	package 2052932;
 }
 
 options{
