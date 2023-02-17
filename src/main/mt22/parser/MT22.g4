@@ -1,8 +1,8 @@
 grammar MT22;
 
 @lexer::header {
-	from lexererr import *;
-	package 2052932;
+from lexererr import *;
+studentID = "2052932";
 }
 
 options{
