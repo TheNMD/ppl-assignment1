@@ -11,7 +11,7 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\6")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32")
         buf.write("\7\4\2\t\2\3\2\3\2\3\2\2\2\3\2\2\2\2\5\2\4\3\2\2\2\4\5")
         buf.write("\7\2\2\3\5\3\3\2\2\2\2")
         return buf.getvalue()
@@ -27,20 +27,44 @@ class MT22Parser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [  ]
+    literalNames = [ "<INVALID>", "<INVALID>", "'+'", "'-'", "'*'", "'/'", 
+                     "'.'", "','", "';'", "':'", "'('", "')'", "'['", "']'", 
+                     "'{'", "'}'" ]
 
-    symbolicNames = [ "<INVALID>", "WS", "ERROR_CHAR", "UNCLOSE_STRING", 
-                      "ILLEGAL_ESCAPE" ]
+    symbolicNames = [ "<INVALID>", "ID", "ADDOP", "SUBOP", "MULOP", "DIVOP", 
+                      "DOT", "CM", "SM", "CL", "LB", "RB", "LSB", "RSB", 
+                      "LCB", "RCB", "INTLIT", "FLOATLIT", "DECIMAL", "EXPONENT", 
+                      "BOOLIT", "WS", "ERROR_CHAR", "UNCLOSE_STRING", "ILLEGAL_ESCAPE" ]
 
     RULE_program = 0
 
     ruleNames =  [ "program" ]
 
     EOF = Token.EOF
-    WS=1
-    ERROR_CHAR=2
-    UNCLOSE_STRING=3
-    ILLEGAL_ESCAPE=4
+    ID=1
+    ADDOP=2
+    SUBOP=3
+    MULOP=4
+    DIVOP=5
+    DOT=6
+    CM=7
+    SM=8
+    CL=9
+    LB=10
+    RB=11
+    LSB=12
+    RSB=13
+    LCB=14
+    RCB=15
+    INTLIT=16
+    FLOATLIT=17
+    DECIMAL=18
+    EXPONENT=19
+    BOOLIT=20
+    WS=21
+    ERROR_CHAR=22
+    UNCLOSE_STRING=23
+    ILLEGAL_ESCAPE=24
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)

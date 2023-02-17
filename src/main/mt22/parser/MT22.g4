@@ -19,6 +19,8 @@ ID : [a-zA-Z_][a-zA-Z0-9_]* ;
 // Operators
 ADDOP : '+' ;
 
+SUBOP : '-' ;
+
 MULOP : '*' ;
 
 DIVOP : '/' ;
@@ -45,11 +47,15 @@ LCB : '{' ;
 RCB : '}' ;
 
 // Literals
-INTLIT : '0' | [1-9][0-9_]* {self.text = self.text.replace('_','')} ;
+INT : '0' | [1-9][0-9_]* {self.text = self.text.replace('_','')} ;
 
-FLOATLIT: [0-9]+ ('.' [0-9]+ | [eE][+-]? [0-9]+ | '.' [0-9]+ [eE][+-]? [0-9]+) ;
+FLOAT : INT DECIMAL? EXPONENT? ;
 
-BOOLIT : 'true' | 'false' ;
+DECIMAL : '.' [0-9]* ;
+
+EXPONENT : [eE][+-]? [0-9]+ ;
+
+BOOLEAN : 'true' | 'false' ;
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
 
