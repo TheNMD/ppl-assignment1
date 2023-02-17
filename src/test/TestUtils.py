@@ -12,7 +12,7 @@ from MT22Parser import MT22Parser
 # import subprocess
 
 # JASMIN_JAR = "./external/jasmin.jar"
-# TEST_DIR = "./test/testcases/"
+TEST_DIR = "./test/testcases/"
 SOL_DIR = "./test/solutions/"
 Lexer = MT22Lexer
 Parser = MT22Parser
