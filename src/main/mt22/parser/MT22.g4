@@ -9,9 +9,12 @@ options{
 	language=Python3;
 }
 
-program: decls EOF ;
+//==========================================================
+// Lexer Rules
+//==========================================================
 
-decls : 'none' ;
+// COMMENT
+COMMENT :  '#' ~('\r' | '\n')* | '/*' . '*/' ;
 
 // KEYWORD
 KWVOID : 'void' ;
@@ -104,8 +107,9 @@ EXPONENT : [eE] [+-]? [0-9]+ ;
 
 BOOLEAN : KWTRUE | KWFALSE ;
 
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+program: EOF ;
 
+WS : [ \t\r\n\b\f]+ -> skip ; // skip spaces, tabs, newlines
 
 ERROR_CHAR: .{raise ErrorToken(self.text)};
 UNCLOSE_STRING: .{raise ErrorToken(self.text)};
