@@ -11,10 +11,9 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\'")
-        buf.write("\f\4\2\t\2\4\3\t\3\3\2\3\2\3\2\3\3\3\3\3\3\2\2\4\2\4\2")
-        buf.write("\2\2\t\2\6\3\2\2\2\4\t\3\2\2\2\6\7\5\4\3\2\7\b\7\2\2\3")
-        buf.write("\b\3\3\2\2\2\t\n\7\3\2\2\n\5\3\2\2\2\2")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3>")
+        buf.write("\7\4\2\t\2\3\2\3\2\3\2\2\2\3\2\2\2\2\5\2\4\3\2\2\2\4\5")
+        buf.write("\7\2\2\3\5\3\3\2\2\2\2")
         return buf.getvalue()
 
 
@@ -28,63 +27,93 @@ class MT22Parser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'none'", "<INVALID>", "'+'", "'-'", "'*'", 
-                     "'/'", "'%'", "'!'", "'&&'", "'||'", "'=='", "'!='", 
-                     "'>'", "'>='", "'<'", "'<='", "'::'", "'.'", "','", 
-                     "';'", "':'", "'('", "')'", "'['", "']'", "'{'", "'}'", 
-                     "'='" ]
+    literalNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "'void'", "'auto'", 
+                     "'integer'", "'float'", "'boolean'", "'string'", "'array'", 
+                     "'inherit'", "'function'", "'true'", "'false'", "'for'", 
+                     "'while'", "'do'", "'break'", "'continue'", "'return'", 
+                     "'if'", "'else'", "'of'", "'out'", "<INVALID>", "'+'", 
+                     "'-'", "'*'", "'/'", "'%'", "'!'", "'&&'", "'||'", 
+                     "'=='", "'!='", "'>'", "'>='", "'<'", "'<='", "'::'", 
+                     "'.'", "','", "';'", "':'", "'('", "')'", "'['", "']'", 
+                     "'{'", "'}'", "'='" ]
 
-    symbolicNames = [ "<INVALID>", "<INVALID>", "ID", "ADDOP", "SUBOP", 
-                      "MULOP", "DIVOP", "MODOP", "EXC", "ANDOP", "OROP", 
-                      "EQLOP", "DIFOP", "LARGEOP", "LEQLOP", "SMALLOP", 
-                      "SEQLOP", "CONCATOP", "DOT", "CM", "SM", "CL", "LB", 
-                      "RB", "LSB", "RSB", "LCB", "RCB", "EQL", "INT", "FLOAT", 
-                      "DECIMAL", "EXPONENT", "BOOLEAN", "WS", "ERROR_CHAR", 
+    symbolicNames = [ "<INVALID>", "CCOMMENT", "CPPCOMMENT", "KWVOID", "KWAUTO", 
+                      "KWINT", "KWFLOAT", "KWBOO", "KWSTR", "KWARR", "KWINHERIT", 
+                      "KWFUNC", "KWTRUE", "KWFALSE", "KWFOR", "KWWHILE", 
+                      "KWDO", "KWBRK", "KWCONT", "KWRTN", "KWIF", "KWELSE", 
+                      "KWOF", "KWOUT", "ID", "ADDOP", "SUBOP", "MULOP", 
+                      "DIVOP", "MODOP", "EXC", "ANDOP", "OROP", "EQLOP", 
+                      "DIFOP", "LARGEOP", "LEQLOP", "SMALLOP", "SEQLOP", 
+                      "CONCATOP", "DOT", "CM", "SM", "CL", "LB", "RB", "LSB", 
+                      "RSB", "LCB", "RCB", "EQL", "LITINT", "LITFLOAT", 
+                      "LITDEC", "LITEXP", "LITBOO", "LITSTR", "WS", "ERROR_CHAR", 
                       "UNCLOSE_STRING", "ILLEGAL_ESCAPE" ]
 
     RULE_program = 0
-    RULE_decls = 1
 
-    ruleNames =  [ "program", "decls" ]
+    ruleNames =  [ "program" ]
 
     EOF = Token.EOF
-    T__0=1
-    ID=2
-    ADDOP=3
-    SUBOP=4
-    MULOP=5
-    DIVOP=6
-    MODOP=7
-    EXC=8
-    ANDOP=9
-    OROP=10
-    EQLOP=11
-    DIFOP=12
-    LARGEOP=13
-    LEQLOP=14
-    SMALLOP=15
-    SEQLOP=16
-    CONCATOP=17
-    DOT=18
-    CM=19
-    SM=20
-    CL=21
-    LB=22
-    RB=23
-    LSB=24
-    RSB=25
-    LCB=26
-    RCB=27
-    EQL=28
-    INT=29
-    FLOAT=30
-    DECIMAL=31
-    EXPONENT=32
-    BOOLEAN=33
-    WS=34
-    ERROR_CHAR=35
-    UNCLOSE_STRING=36
-    ILLEGAL_ESCAPE=37
+    CCOMMENT=1
+    CPPCOMMENT=2
+    KWVOID=3
+    KWAUTO=4
+    KWINT=5
+    KWFLOAT=6
+    KWBOO=7
+    KWSTR=8
+    KWARR=9
+    KWINHERIT=10
+    KWFUNC=11
+    KWTRUE=12
+    KWFALSE=13
+    KWFOR=14
+    KWWHILE=15
+    KWDO=16
+    KWBRK=17
+    KWCONT=18
+    KWRTN=19
+    KWIF=20
+    KWELSE=21
+    KWOF=22
+    KWOUT=23
+    ID=24
+    ADDOP=25
+    SUBOP=26
+    MULOP=27
+    DIVOP=28
+    MODOP=29
+    EXC=30
+    ANDOP=31
+    OROP=32
+    EQLOP=33
+    DIFOP=34
+    LARGEOP=35
+    LEQLOP=36
+    SMALLOP=37
+    SEQLOP=38
+    CONCATOP=39
+    DOT=40
+    CM=41
+    SM=42
+    CL=43
+    LB=44
+    RB=45
+    LSB=46
+    RSB=47
+    LCB=48
+    RCB=49
+    EQL=50
+    LITINT=51
+    LITFLOAT=52
+    LITDEC=53
+    LITEXP=54
+    LITBOO=55
+    LITSTR=56
+    WS=57
+    ERROR_CHAR=58
+    UNCLOSE_STRING=59
+    ILLEGAL_ESCAPE=60
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -101,10 +130,6 @@ class MT22Parser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-
-        def decls(self):
-            return self.getTypedRuleContext(MT22Parser.DeclsContext,0)
-
 
         def EOF(self):
             return self.getToken(MT22Parser.EOF, 0)
@@ -127,47 +152,8 @@ class MT22Parser ( Parser ):
         self.enterRule(localctx, 0, self.RULE_program)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 4
-            self.decls()
-            self.state = 5
+            self.state = 2
             self.match(MT22Parser.EOF)
-        except RecognitionException as re:
-            localctx.exception = re
-            self._errHandler.reportError(self, re)
-            self._errHandler.recover(self, re)
-        finally:
-            self.exitRule()
-        return localctx
-
-
-    class DeclsContext(ParserRuleContext):
-        __slots__ = 'parser'
-
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
-            super().__init__(parent, invokingState)
-            self.parser = parser
-
-
-        def getRuleIndex(self):
-            return MT22Parser.RULE_decls
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitDecls" ):
-                return visitor.visitDecls(self)
-            else:
-                return visitor.visitChildren(self)
-
-
-
-
-    def decls(self):
-
-        localctx = MT22Parser.DeclsContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 2, self.RULE_decls)
-        try:
-            self.enterOuterAlt(localctx, 1)
-            self.state = 7
-            self.match(MT22Parser.T__0)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)

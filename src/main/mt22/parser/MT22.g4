@@ -14,7 +14,8 @@ options{
 //==========================================================
 
 // COMMENT
-COMMENT :  '#' ~('\r' | '\n')* | '/*' . '*/' ;
+CCOMMENT :  '//' .*? ;
+CPPCOMMENT : '/*' .*? '*/' ;
 
 // KEYWORD
 KWVOID : 'void' ;
@@ -97,17 +98,73 @@ RCB : '}' ;
 EQL : '=' ;
 
 // Literals
-INT : '0' | [1-9] [0-9_]* {self.text = self.text.replace('_','')} ;
+LITINT : '0' | [1-9] [0-9_]* {self.text = self.text.replace('_','')} ;
 
-FLOAT : INT DECIMAL? EXPONENT? ;
+LITFLOAT : LITINT Decimal? Exponent?  {self.text = self.text.replace('_','')} ;
 
-DECIMAL : '.' [0-9]* ;
+fragment Decimal : '.' [0-9]* ;
 
-EXPONENT : [eE] [+-]? [0-9]+ ;
+fragment Exponent : [eE] [+-]? [0-9]+ ;
 
-BOOLEAN : KWTRUE | KWFALSE ;
+LITBOO : KWTRUE | KWFALSE ;
 
-program: EOF ;
+fragment DoubleQuote : '"' ;
+
+fragment InvDoubleQuote : ~ '"' ;
+
+LITSTR : '"' ('\\' DoubleQuote | InvDoubleQuote)* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
+
+LITARR : LCB 'none' RCB ;
+
+//==========================================================
+// Parser Rules
+//==========================================================
+
+program : declist EOF ;
+
+declist : decl declist | decl ;
+
+decl : vardecl | funcdecl ;
+
+vardecl : idlist CL typ init SM ;
+
+idlist : ID ids | ID ;
+
+ids : CM ID ids | ;
+
+typ : 'integer' | 'float' | 'boolean' | 'string' | LITARR ;
+
+init : (EQL exprlist)? ;
+
+funcdecl : typ ID paradecl body ;
+
+paradecl: LB paralist RB ;
+
+paralist : para paras | ;
+
+paras : SM para paras | ;
+
+para : typ idlist ;
+
+body : LCB bodylist RCB ;
+
+bodylist : bodydecl bodylist | ;
+
+bodydecl : vardecl | stmt ;
+
+stmt : (assignstmt | callstmt | returnstmt) SM ;
+
+assignstmt : ID '=' expr ;
+
+callstmt : ID LB exprlist RB ;
+
+exprlist : expr exprs | ;
+
+exprs : CM expr exprs | ;
+
+returnstmt : 'return' expr ;
+
+expr : 'expr' ;
 
 WS : [ \t\r\n\b\f]+ -> skip ; // skip spaces, tabs, newlines
 
