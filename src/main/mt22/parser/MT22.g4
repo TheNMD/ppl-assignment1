@@ -14,12 +14,12 @@ options{
 //==========================================================
 
 // Whitespace
-WS : [ \t\r\n\b\f]+ -> skip ;
+WS : [ \t\n\r\f\b]+ -> skip ;
 
 // COMMENT
-CCOMMENT :  '//' .*? ;
+CCOMMENT :  '/*' .*? '*/' -> skip;
 
-CPPCOMMENT : '/*' .*? '*/' ;
+CPPCOMMENT : '//' ~ [\r\n]* -> skip;
 
 // KEYWORD
 KWVOID : 'void' ;
@@ -199,5 +199,7 @@ operand: LITINT | LITFLOAT | ID | callstmt | subexpr ;
 subexpr: LB expr RB ;
 
 ERROR_CHAR: .{raise ErrorToken(self.text)};
+
 UNCLOSE_STRING: .{raise ErrorToken(self.text)};
+
 ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
