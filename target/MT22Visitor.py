@@ -39,13 +39,8 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#typ.
-    def visitTyp(self, ctx:MT22Parser.TypContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#init.
-    def visitInit(self, ctx:MT22Parser.InitContext):
+    # Visit a parse tree produced by MT22Parser#vartyp.
+    def visitVartyp(self, ctx:MT22Parser.VartypContext):
         return self.visitChildren(ctx)
 
 
@@ -54,8 +49,8 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#paradecl.
-    def visitParadecl(self, ctx:MT22Parser.ParadeclContext):
+    # Visit a parse tree produced by MT22Parser#funcproto.
+    def visitFuncproto(self, ctx:MT22Parser.FuncprotoContext):
         return self.visitChildren(ctx)
 
 
@@ -74,8 +69,13 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#body.
-    def visitBody(self, ctx:MT22Parser.BodyContext):
+    # Visit a parse tree produced by MT22Parser#functyp.
+    def visitFunctyp(self, ctx:MT22Parser.FunctypContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#funcbody.
+    def visitFuncbody(self, ctx:MT22Parser.FuncbodyContext):
         return self.visitChildren(ctx)
 
 
@@ -121,6 +121,26 @@ class MT22Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MT22Parser#expr.
     def visitExpr(self, ctx:MT22Parser.ExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#expr1.
+    def visitExpr1(self, ctx:MT22Parser.Expr1Context):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#expr2.
+    def visitExpr2(self, ctx:MT22Parser.Expr2Context):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#operand.
+    def visitOperand(self, ctx:MT22Parser.OperandContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#subexpr.
+    def visitSubexpr(self, ctx:MT22Parser.SubexprContext):
         return self.visitChildren(ctx)
 
 

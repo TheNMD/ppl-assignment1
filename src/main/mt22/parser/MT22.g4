@@ -13,35 +13,59 @@ options{
 // Lexer Rules
 //==========================================================
 
+// Whitespace
+WS : [ \t\r\n\b\f]+ -> skip ;
+
 // COMMENT
 CCOMMENT :  '//' .*? ;
+
 CPPCOMMENT : '/*' .*? '*/' ;
 
 // KEYWORD
 KWVOID : 'void' ;
+
 KWAUTO : 'auto' ;
+
 KWINT :  'integer' ;
+
 KWFLOAT : 'float' ;
+
 KWBOO : 'boolean' ;
+
 KWSTR : 'string' ;
+
 KWARR : 'array' ;
+
 KWINHERIT : 'inherit' ;
+
 KWFUNC : 'function' ;
+
 KWTRUE : 'true' ;
+
 KWFALSE : 'false' ;
+
 KWFOR : 'for' ;
+
 KWWHILE : 'while' ;
+
 KWDO : 'do' ;
+
 KWBRK : 'break' ;
+
 KWCONT : 'continue' ;
+
 KWRTN : 'return' ;
+
 KWIF : 'if' ;
+
 KWELSE : 'else' ;
+
 KWOF : 'of' ;
+
 KWOUT : 'out' ;
 
 // Identifiers
-ID : [a-zA-Z_] [a-zA-Z0-9_]* ;
+ID : [a-zA-Z_][a-zA-Z0-9_]* ;
 
 // Operators
 ADDOP : '+' ;
@@ -98,13 +122,13 @@ RCB : '}' ;
 EQL : '=' ;
 
 // Literals
-LITINT : '0' | [1-9] [0-9_]* {self.text = self.text.replace('_','')} ;
+LITINT : '0' | [1-9][0-9_]* {self.text = self.text.replace('_','')} ;
 
 LITFLOAT : LITINT Decimal? Exponent?  {self.text = self.text.replace('_','')} ;
 
-fragment Decimal : '.' [0-9]* ;
+fragment Decimal : '.'[0-9]* ;
 
-fragment Exponent : [eE] [+-]? [0-9]+ ;
+fragment Exponent : [eE][+-]?[0-9]+ ;
 
 LITBOO : KWTRUE | KWFALSE ;
 
@@ -126,27 +150,27 @@ declist : decl declist | decl ;
 
 decl : vardecl | funcdecl ;
 
-vardecl : idlist CL typ init SM ;
+vardecl : idlist CL vartyp (EQL exprlist)? SM ;
 
 idlist : ID ids | ID ;
 
 ids : CM ID ids | ;
 
-typ : 'integer' | 'float' | 'boolean' | 'string' | LITARR ;
+vartyp : KWAUTO | KWINT | KWFLOAT | KWBOO | KWSTR | KWARR ;
 
-init : (EQL exprlist)? ;
+funcdecl : funcproto funcbody ;
 
-funcdecl : typ ID paradecl body ;
-
-paradecl: LB paralist RB ;
+funcproto : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? ;
 
 paralist : para paras | ;
 
-paras : SM para paras | ;
+paras : CM para paras | ;
 
-para : typ idlist ;
+para :  KWINHERIT? KWOUT? ID CL vartyp ;
 
-body : LCB bodylist RCB ;
+functyp : KWAUTO | KWINT | KWFLOAT | KWBOO | KWSTR | KWVOID ;
+
+funcbody : LCB bodylist RCB ;
 
 bodylist : bodydecl bodylist | ;
 
@@ -164,9 +188,15 @@ exprs : CM expr exprs | ;
 
 returnstmt : 'return' expr ;
 
-expr : 'expr' ;
+expr: expr1 ADDOP expr | expr1 ;
 
-WS : [ \t\r\n\b\f]+ -> skip ; // skip spaces, tabs, newlines
+expr1: expr2 SUBOP expr2 | expr2 ;
+
+expr2: expr2 (MULOP | DIVOP) operand | operand ;
+
+operand: LITINT | LITFLOAT | ID | callstmt | subexpr ;
+
+subexpr: LB expr RB ;
 
 ERROR_CHAR: .{raise ErrorToken(self.text)};
 UNCLOSE_STRING: .{raise ErrorToken(self.text)};

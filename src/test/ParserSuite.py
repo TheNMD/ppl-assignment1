@@ -7,4 +7,4 @@ class ParserSuite(unittest.TestCase):
         """Simple program: int main() {} """
         input = """main: function void() {}"""
         expect = "successful"
-        self.assertTrue(TestParser.test(input, expect, 201))
+        self.assertTrue(TestParser.test(input, expect, 203))
