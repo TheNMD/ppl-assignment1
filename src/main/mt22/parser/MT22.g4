@@ -194,7 +194,7 @@ bodylistvoid : bodydeclvoid bodylistvoid | ;
 
 bodydeclvoid : vardecl | stmtvoid ;
 
-stmtvoid : (assignstmt | callstmt) SM ;
+stmtvoid : (assignstmt | callstmt | 'return') SM ;
 
 assignstmt : (ID | ID idxop)  '=' expr ;
 
