@@ -222,7 +222,7 @@ class MT22Lexer(Lexer):
     MULOP = 28
     DIVOP = 29
     MODOP = 30
-    EXC = 31
+    EXCOP = 31
     ANDOP = 32
     OROP = 33
     EQLOP = 34
@@ -266,7 +266,7 @@ class MT22Lexer(Lexer):
             "KWFLOAT", "KWBOO", "KWSTR", "KWARR", "KWINHERIT", "KWFUNC", 
             "KWTRUE", "KWFALSE", "KWFOR", "KWWHILE", "KWDO", "KWBRK", "KWCONT", 
             "KWRTN", "KWIF", "KWELSE", "KWOF", "KWOUT", "ID", "ADDOP", "SUBOP", 
-            "MULOP", "DIVOP", "MODOP", "EXC", "ANDOP", "OROP", "EQLOP", 
+            "MULOP", "DIVOP", "MODOP", "EXCOP", "ANDOP", "OROP", "EQLOP", 
             "DIFOP", "LARGEOP", "LEQLOP", "SMALLOP", "SEQLOP", "CONCATOP", 
             "DOT", "CM", "SM", "CL", "LB", "RB", "LSB", "RSB", "LCB", "RCB", 
             "EQL", "LITINT", "LITFLOAT", "LITBOO", "LITSTR" ]
@@ -275,7 +275,7 @@ class MT22Lexer(Lexer):
                   "KWFLOAT", "KWBOO", "KWSTR", "KWARR", "KWINHERIT", "KWFUNC", 
                   "KWTRUE", "KWFALSE", "KWFOR", "KWWHILE", "KWDO", "KWBRK", 
                   "KWCONT", "KWRTN", "KWIF", "KWELSE", "KWOF", "KWOUT", 
-                  "ID", "ADDOP", "SUBOP", "MULOP", "DIVOP", "MODOP", "EXC", 
+                  "ID", "ADDOP", "SUBOP", "MULOP", "DIVOP", "MODOP", "EXCOP", 
                   "ANDOP", "OROP", "EQLOP", "DIFOP", "LARGEOP", "LEQLOP", 
                   "SMALLOP", "SEQLOP", "CONCATOP", "DOT", "CM", "SM", "CL", 
                   "LB", "RB", "LSB", "RSB", "LCB", "RCB", "EQL", "LITINT", 

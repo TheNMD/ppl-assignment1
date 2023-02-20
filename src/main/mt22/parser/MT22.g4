@@ -78,7 +78,7 @@ DIVOP : '/' ;
 
 MODOP : '%' ;
 
-EXC : '!' ;
+EXCOP : '!' ;
 
 ANDOP : '&&' ;
 
@@ -134,8 +134,6 @@ LITBOO : KWTRUE | KWFALSE ;
 
 LITSTR : '"' ('\\' [bfrnt'\\"] | ~[\b\f\r\n\t'\\"])* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
 
-litarr : LCB exprlist RCB ;
-
 //ERROR_CHAR: .{raise ErrorToken(self.text)};
 
 //NCLOSE_STRING: .{raise ErrorToken(self.text)};
@@ -152,17 +150,29 @@ declist : decl declist | decl ;
 
 decl : vardecl | funcdecl ;
 
-vardecl : idlist CL vartyp (EQL exprlist)? SM ;
+vardecl : idlist CL vartyp (EQL exprlist)? SM | idlist CL KWAUTO EQL exprlist SM | idlist CL KWARR LSB idxlist RSB 'of' vartyp (EQL arraylist)? SM ;
 
 idlist : ID ids | ID ;
 
 ids : CM ID ids | ;
 
-vartyp : KWAUTO | KWINT | KWFLOAT | KWBOO | KWSTR | KWARR ;
+vartyp : KWINT | KWFLOAT | KWBOO | KWSTR ;
 
-funcdecl : funcproto funcbody ;
+idxlist : idx idxs | idx {self.text = self.text.replace('_','')} ;
 
-funcproto : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? ;
+idxs : CM idx idxs | {self.text = self.text.replace('_','')} ;
+
+idx : LITINT ;
+
+arraylist : array arrays | array ;
+
+arrays : CM array arrays | ;
+
+array : LCB exprlist RCB ;
+
+funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB 
+		 | ID CL KWFUNC KWAUTO LB paralist RB (KWINHERIT ID)? LCB bodylistauto RCB 
+		 | ID CL KWFUNC KWVOID LB paralist RB (KWINHERIT ID)? LCB bodylistvoid RCB ;
 
 paralist : para paras | ;
 
@@ -170,32 +180,52 @@ paras : CM para paras | ;
 
 para :  KWINHERIT? KWOUT? ID CL vartyp ;
 
-functyp : KWAUTO | KWINT | KWFLOAT | KWBOO | KWSTR | KWVOID ;
-
-funcbody : LCB bodylist RCB ;
+functyp :  KWINT | KWFLOAT | KWBOO | KWSTR ;
 
 bodylist : bodydecl bodylist | ;
 
+stmt : (assignstmt | callstmt | rtnstmt) SM ;
+
 bodydecl : vardecl | stmt ;
 
-stmt : (assignstmt | callstmt | returnstmt) SM ;
+bodylistauto : bodydecl bodylistauto | rtnstmt SM ;
 
-assignstmt : ID '=' expr ;
+bodylistvoid : bodydeclvoid bodylistvoid | ;
+
+bodydeclvoid : vardecl | stmtvoid ;
+
+stmtvoid : (assignstmt | callstmt) SM ;
+
+assignstmt : (ID | ID idxop)  '=' expr ;
 
 callstmt : ID LB exprlist RB ;
+
+rtnstmt : 'return' expr ;
 
 exprlist : expr exprs | ;
 
 exprs : CM expr exprs | ;
 
-returnstmt : 'return' expr ;
+expr : unexpr | biexpr ;
 
-expr: expr1 ADDOP expr | expr1 ;
+unexpr :  EXCOP unexpr | unexpr1 ;
 
-expr1: expr2 SUBOP expr2 | expr2 ;
+unexpr1 : SUBOP unexpr1 | unexpr2 ;
 
-expr2: expr2 (MULOP | DIVOP) operand | operand ;
+unexpr2 : unexpr2 idxop | operand ;
 
-operand: LITINT | LITFLOAT | LITBOO | LITSTR | litarr | ID | callstmt | subexpr ;
+idxop : LSB idxlist RSB ;
+
+biexpr : biexpr1 CONCATOP biexpr1 | biexpr1 ;
+
+biexpr1 : biexpr2 (EQLOP | DIFOP | LARGEOP | LEQLOP | SMALLOP | SEQLOP)  biexpr2 | biexpr2 ;
+
+biexpr2 : biexpr2 (ANDOP | OROP) biexpr3 | biexpr3 ;
+
+biexpr3 : biexpr3 (ADDOP | SUBOP) biexpr4 | biexpr4 ;
+
+biexpr4 : biexpr4 (MULOP | DIVOP | MODOP) operand | operand ;
+
+operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID | callstmt | subexpr | ID idxop | LCB exprlist RCB ;
 
 subexpr: LB expr RB ;
