@@ -9,6 +9,11 @@ else:
 
 class MT22Visitor(ParseTreeVisitor):
 
+    # Visit a parse tree produced by MT22Parser#litarr.
+    def visitLitarr(self, ctx:MT22Parser.LitarrContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MT22Parser#program.
     def visitProgram(self, ctx:MT22Parser.ProgramContext):
         return self.visitChildren(ctx)

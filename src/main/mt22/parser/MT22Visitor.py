@@ -9,13 +9,8 @@ else:
 
 class MT22Visitor(ParseTreeVisitor):
 
-    # Visit a parse tree produced by MT22Parser#ccomment.
-    def visitCcomment(self, ctx:MT22Parser.CcommentContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#cppcomment.
-    def visitCppcomment(self, ctx:MT22Parser.CppcommentContext):
+    # Visit a parse tree produced by MT22Parser#litarr.
+    def visitLitarr(self, ctx:MT22Parser.LitarrContext):
         return self.visitChildren(ctx)
 
 

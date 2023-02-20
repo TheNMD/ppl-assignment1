@@ -132,13 +132,15 @@ fragment Exponent : [eE][+-]?[0-9]+ ;
 
 LITBOO : KWTRUE | KWFALSE ;
 
-fragment DoubleQuote : '"' ;
+LITSTR : '"' ('\\' [bfrnt'\\"] | ~[\b\f\r\n\t'\\"])* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
 
-fragment InvDoubleQuote : ~ '"' ;
+litarr : LCB exprlist RCB ;
 
-LITSTR : '"' ('\\' DoubleQuote | InvDoubleQuote)* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
+//ERROR_CHAR: .{raise ErrorToken(self.text)};
 
-LITARR : LCB 'none' RCB ;
+//NCLOSE_STRING: .{raise ErrorToken(self.text)};
+
+//ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
 
 //==========================================================
 // Parser Rules
@@ -194,12 +196,6 @@ expr1: expr2 SUBOP expr2 | expr2 ;
 
 expr2: expr2 (MULOP | DIVOP) operand | operand ;
 
-operand: LITINT | LITFLOAT | ID | callstmt | subexpr ;
+operand: LITINT | LITFLOAT | LITBOO | LITSTR | litarr | ID | callstmt | subexpr ;
 
 subexpr: LB expr RB ;
-
-ERROR_CHAR: .{raise ErrorToken(self.text)};
-
-UNCLOSE_STRING: .{raise ErrorToken(self.text)};
-
-ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
