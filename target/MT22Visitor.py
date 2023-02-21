@@ -194,6 +194,16 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MT22Parser#whilestmt.
+    def visitWhilestmt(self, ctx:MT22Parser.WhilestmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#dowhilestmt.
+    def visitDowhilestmt(self, ctx:MT22Parser.DowhilestmtContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MT22Parser#breakstmt.
     def visitBreakstmt(self, ctx:MT22Parser.BreakstmtContext):
         return self.visitChildren(ctx)
@@ -216,6 +226,11 @@ class MT22Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MT22Parser#blockstmt.
     def visitBlockstmt(self, ctx:MT22Parser.BlockstmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#specialfunc.
+    def visitSpecialfunc(self, ctx:MT22Parser.SpecialfuncContext):
         return self.visitChildren(ctx)
 
 

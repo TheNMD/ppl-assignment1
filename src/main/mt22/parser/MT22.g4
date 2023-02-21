@@ -64,6 +64,27 @@ KWOF : 'of' ;
 
 KWOUT : 'out' ;
 
+// Special functions
+SFREADINT : 'readInteger' ;
+
+SFPRINTINT : 'printInteger' ;
+
+SFREADFLOAT : 'readFloat' ;
+
+SFPRINTFLOAT : 'writeFloat' ;
+
+SFREADBOOL : 'readBoolean' ;
+
+SFPRINTBOOL : 'printBoolean' ;
+
+SFREADSTR : 'readString' ;
+
+SFPRINTSTR : 'printString' ;
+
+SFSUPER : 'super' ;
+
+SFPREVENT : 'preventDefault()' ;
+
 // Identifiers
 ID : [a-zA-Z_][a-zA-Z0-9_]* ;
 
@@ -185,7 +206,7 @@ bodylist : bodydecl bodylist | ;
 
 bodydecl : vardecl | stmt ;
 
-stmt : assignstmt | ifstmt | forstmt | breakstmt | continuestmt |rtnstmt | callstmt | blockstmt ;
+stmt : assignstmt | ifstmt | forstmt | whilestmt | dowhilestmt | breakstmt | continuestmt |rtnstmt | callstmt | blockstmt ;
 
 assignstmt : (ID | ID idxop)  EQL expr SM ;
 
@@ -213,11 +234,15 @@ biexpr3 : biexpr3 (ADDOP | SUBOP) biexpr4 | biexpr4 ;
 
 biexpr4 : biexpr4 (MULOP | DIVOP | MODOP) operand | operand ;
 
-operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID | callstmt | LB expr RB | ID idxop | LCB exprlist RCB ;
+operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID idxop? | callstmt | LB expr RB | LCB exprlist RCB ;
 
 ifstmt : 'ifstmt' ;
 
 forstmt : KWFOR LB ID EQL expr CM expr CM expr RB stmt ;
+
+whilestmt : KWWHILE LB expr RB stmt ;
+
+dowhilestmt : KWDO blockstmt KWWHILE LB expr RB SM ;
 
 breakstmt : KWBRK SM ;
 
@@ -225,6 +250,8 @@ continuestmt : KWCONT SM ;
 
 rtnstmt : KWRTN (expr)? SM ;
 
-callstmt : ID LB exprlist RB SM ;
+callstmt : (specialfunc | ID) LB exprlist RB SM ;
 
 blockstmt : LCB bodylist RCB ;
+
+specialfunc : SFREADINT | SFPRINTINT | SFREADFLOAT | SFPRINTFLOAT | SFREADBOOL | SFPRINTBOOL | SFREADSTR | SFPRINTSTR | SFSUPER | SFPREVENT ;
