@@ -134,11 +134,11 @@ LITBOO : KWTRUE | KWFALSE ;
 
 LITSTR : '"' ('\\' [bfrnt'\\"] | ~[\b\f\r\n\t'\\"])* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
 
-//ERROR_CHAR: .{raise ErrorToken(self.text)};
+ERROR_CHAR: .{raise ErrorToken(self.text)};
 
-//NCLOSE_STRING: .{raise ErrorToken(self.text)};
+NCLOSE_STRING: .{raise ErrorToken(self.text)};
 
-//ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
+ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
 
 //==========================================================
 // Parser Rules
