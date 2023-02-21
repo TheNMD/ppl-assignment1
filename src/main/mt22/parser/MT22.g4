@@ -150,13 +150,14 @@ declist : decl declist | decl ;
 
 decl : vardecl | funcdecl ;
 
-vardecl : idlist CL vartyp (EQL exprlist)? SM | idlist CL KWAUTO EQL exprlist SM | idlist CL KWARR LSB idxlist RSB 'of' vartyp (EQL arraylist)? SM ;
+vardecl : idlist CL vartyp (EQL exprlist)? SM
+		| idlist CL KWARR LSB idxlist RSB KWOF vartyp (EQL arraylist)? SM ;
 
 idlist : ID ids | ID ;
 
 ids : CM ID ids | ;
 
-vartyp : KWINT | KWFLOAT | KWBOO | KWSTR ;
+vartyp : KWINT | KWFLOAT | KWBOO | KWSTR | KWAUTO ;
 
 idxlist : idx idxs | idx {self.text = self.text.replace('_','')} ;
 
@@ -170,9 +171,7 @@ arrays : CM array arrays | ;
 
 array : LCB exprlist RCB ;
 
-funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB 
-		 | ID CL KWFUNC KWAUTO LB paralist RB (KWINHERIT ID)? LCB bodylistauto RCB 
-		 | ID CL KWFUNC KWVOID LB paralist RB (KWINHERIT ID)? LCB bodylistvoid RCB ;
+funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB ;
 
 paralist : para paras | ;
 
@@ -180,27 +179,15 @@ paras : CM para paras | ;
 
 para :  KWINHERIT? KWOUT? ID CL vartyp ;
 
-functyp :  KWINT | KWFLOAT | KWBOO | KWSTR ;
+functyp :  KWINT | KWFLOAT | KWBOO | KWSTR | KWAUTO | KWVOID ;
 
 bodylist : bodydecl bodylist | ;
 
-stmt : (assignstmt | callstmt | rtnstmt) SM ;
-
 bodydecl : vardecl | stmt ;
 
-bodylistauto : bodydecl bodylistauto | rtnstmt SM ;
+stmt : assignstmt | ifstmt | forstmt | breakstmt | continuestmt |rtnstmt | callstmt | blockstmt ;
 
-bodylistvoid : bodydeclvoid bodylistvoid | ;
-
-bodydeclvoid : vardecl | stmtvoid ;
-
-stmtvoid : (assignstmt | callstmt | 'return') SM ;
-
-assignstmt : (ID | ID idxop)  '=' expr ;
-
-callstmt : ID LB exprlist RB ;
-
-rtnstmt : 'return' expr ;
+assignstmt : (ID | ID idxop)  EQL expr SM ;
 
 exprlist : expr exprs | ;
 
@@ -226,6 +213,18 @@ biexpr3 : biexpr3 (ADDOP | SUBOP) biexpr4 | biexpr4 ;
 
 biexpr4 : biexpr4 (MULOP | DIVOP | MODOP) operand | operand ;
 
-operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID | callstmt | subexpr | ID idxop | LCB exprlist RCB ;
+operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID | callstmt | LB expr RB | ID idxop | LCB exprlist RCB ;
 
-subexpr: LB expr RB ;
+ifstmt : 'ifstmt' ;
+
+forstmt : KWFOR LB ID EQL expr CM expr CM expr RB stmt ;
+
+breakstmt : KWBRK SM ;
+
+continuestmt : KWCONT SM ;
+
+rtnstmt : KWRTN (expr)? SM ;
+
+callstmt : ID LB exprlist RB SM ;
+
+blockstmt : LCB bodylist RCB ;
