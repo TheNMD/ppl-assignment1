@@ -134,11 +134,11 @@ LITBOO : KWTRUE | KWFALSE ;
 
 LITSTR : '"' ('\\' [bfrnt'\\"] | ~[\b\f\r\n\t'\\"])* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
 
-//ERROR_CHAR: .{raise ErrorToken(self.text)};
+ERROR_CHAR: .{raise ErrorToken(self.text)};
 
-//NCLOSE_STRING: .{raise ErrorToken(self.text)};
+NCLOSE_STRING: .{raise ErrorToken(self.text)};
 
-//ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
+ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
 
 //==========================================================
 // Parser Rules
@@ -170,9 +170,9 @@ arrays : CM array arrays | ;
 
 array : LCB exprlist RCB ;
 
-funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB 
-		 | ID CL KWFUNC KWAUTO LB paralist RB (KWINHERIT ID)? LCB bodylistauto RCB 
-		 | ID CL KWFUNC KWVOID LB paralist RB (KWINHERIT ID)? LCB bodylistvoid RCB ;
+funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB ;
+		 //| ID CL KWFUNC KWAUTO LB paralist RB (KWINHERIT ID)? LCB bodylistauto RCB 
+		 //| ID CL KWFUNC KWVOID LB paralist RB (KWINHERIT ID)? LCB bodylistvoid RCB ;
 
 paralist : para paras | ;
 
@@ -180,27 +180,41 @@ paras : CM para paras | ;
 
 para :  KWINHERIT? KWOUT? ID CL vartyp ;
 
-functyp :  KWINT | KWFLOAT | KWBOO | KWSTR ;
+functyp :  KWINT | KWFLOAT | KWBOO | KWSTR | KWAUTO | KWVOID ;
 
 bodylist : bodydecl bodylist | ;
 
-stmt : (assignstmt | callstmt | rtnstmt) SM ;
+bodydecl : vardecl | stmt | ifstmt ;
 
-bodydecl : vardecl | stmt ;
+stmt : assignstmt | breakstmt | continuestmt | rtnstmt | callstmt | blockstmt ;
 
-bodylistauto : bodydecl bodylistauto | rtnstmt SM ;
+//bodylistauto : bodydecl bodylistauto | rtnstmt ;
 
-bodylistvoid : bodydeclvoid bodylistvoid | ;
+//bodylistvoid : bodydeclvoid bodylistvoid | ;
 
-bodydeclvoid : vardecl | stmtvoid ;
+//bodydeclvoid : vardecl | stmtvoid | ifstmt  ;
 
-stmtvoid : (assignstmt | callstmt | 'return') SM ;
+//stmtvoid : assignstmt | breakstmt | continuestmt | KWRTN SM | callstmt | blockstmtvoid ;
 
-assignstmt : (ID | ID idxop)  '=' expr ;
+assignstmt : (ID | ID idxop)  '=' expr SM;
 
-callstmt : ID LB exprlist RB ;
+ifstmt : matchstmt | unmatchstmt ;
 
-rtnstmt : 'return' expr ;
+matchstmt : KWIF LB expr RB matchstmt KWELSE matchstmt | stmt ;
+
+unmatchstmt : KWIF LB expr RB ifstmt |  KWIF LB expr RB matchstmt KWELSE unmatchstmt ;
+
+breakstmt : KWBRK SM ;
+
+continuestmt : KWCONT SM ;
+
+rtnstmt : KWRTN (expr)? SM ;
+
+callstmt : ID LB exprlist RB SM ;
+
+blockstmt : LCB bodylist RCB ;
+
+//blockstmtvoid : LCB bodylistvoid RCB ;
 
 exprlist : expr exprs | ;
 
