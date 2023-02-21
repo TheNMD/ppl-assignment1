@@ -190,7 +190,7 @@ arraylist : array arrays | array ;
 
 arrays : CM array arrays | ;
 
-array : LCB exprlist RCB ;
+array : LCB exprlist? RCB ;
 
 funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB ;
 
@@ -234,7 +234,7 @@ biexpr3 : biexpr3 (ADDOP | SUBOP) biexpr4 | biexpr4 ;
 
 biexpr4 : biexpr4 (MULOP | DIVOP | MODOP) operand | operand ;
 
-operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID idxop? | callstmt | LB expr RB | LCB exprlist RCB ;
+operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID idxop? | ID LB exprlist RB | LB expr RB | LCB exprlist RCB ;
 
 ifstmt : 'ifstmt' ;
 
