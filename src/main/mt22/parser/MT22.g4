@@ -64,27 +64,6 @@ KWOF : 'of' ;
 
 KWOUT : 'out' ;
 
-// Special functions
-SFREADINT : 'readInteger' ;
-
-SFPRINTINT : 'printInteger' ;
-
-SFREADFLOAT : 'readFloat' ;
-
-SFPRINTFLOAT : 'writeFloat' ;
-
-SFREADBOOL : 'readBoolean' ;
-
-SFPRINTBOOL : 'printBoolean' ;
-
-SFREADSTR : 'readString' ;
-
-SFPRINTSTR : 'printString' ;
-
-SFSUPER : 'super' ;
-
-SFPREVENT : 'preventDefault()' ;
-
 // Identifiers
 ID : [a-zA-Z_][a-zA-Z0-9_]* ;
 
@@ -155,7 +134,7 @@ LITBOO : KWTRUE | KWFALSE ;
 
 LITSTR : '"' ('\\' [bfrnt'\\"] | ~[\b\f\r\n\t'\\"])* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
 
-litarr : LCB exprlist RCB ;
+litarr : LCB exprlist? RCB ;
 
 ERROR_CHAR: .{raise ErrorToken(self.text)};
 
@@ -173,19 +152,19 @@ declist : decl declist | decl ;
 
 decl : vardecl | funcdecl ;
 
-vardecl : idlist CL vartyp (EQL exprlist)? SM | idlist CL KWARR LSB idxlist RSB KWOF vartyp SM ;
+vardecl : idlist CL vartyp SM 
+		| idlist CL (vartyp | KWAUTO) EQL exprlist SM 
+ 		| idlist CL KWARR LSB idxlist RSB KWOF vartyp (EQL litarr)? SM ;
 
 idlist : ID ids | ID ;
 
 ids : CM ID ids | ;
 
-vartyp : KWINT | KWFLOAT | KWBOO | KWSTR | KWAUTO ;
+vartyp : KWINT | KWFLOAT | KWBOO | KWSTR ;
 
-idxlist : idx idxs | idx {self.text = self.text.replace('_','')} ;
+idxlist : LITINT idxs | idx {self.text = self.text.replace('_','')} ;
 
-idxs : CM idx idxs | {self.text = self.text.replace('_','')} ;
-
-idx : LITINT ;
+idxs : CM LITINT idxs | {self.text = self.text.replace('_','')} ;
 
 funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB ;
 
@@ -197,15 +176,41 @@ para :  KWINHERIT? KWOUT? ID CL vartyp ;
 
 functyp :  KWINT | KWFLOAT | KWBOO | KWSTR | KWAUTO | KWVOID ;
 
-bodylist : bodydecl bodylist | ;
+bodylist : body bodies | rtnstmt ;
 
-bodydecl : vardecl | stmt | ifstmt ;
+bodies : body bodies | ;
 
-stmt : assignstmt | forstmt | whilestmt | dowhilestmt | breakstmt | continuestmt |rtnstmt | callstmt | blockstmt ;
+body : vardecl | stmt | ifstmt ;
+
+stmt : assignstmt | forstmt | whilestmt | dowhilestmt | breakstmt | continuestmt | rtnstmt | callstmt | blockstmt ;
 
 assignstmt : (ID | ID idxop)  EQL expr SM ;
 
-exprlist : expr exprs | ;
+ifstmt : matchstmt | unmatchstmt ;
+
+matchstmt : KWIF LB expr RB matchstmt KWELSE matchstmt | stmt ;
+
+unmatchstmt : KWIF LB expr RB ifstmt | KWIF LB expr RB matchstmt KWELSE unmatchstmt ;
+
+forstmt : KWFOR LB ID EQL expr CM expr CM expr RB (stmt | ifstmt) ;
+
+whilestmt : KWWHILE LB expr RB (stmt | ifstmt) ;
+
+dowhilestmt : KWDO blockstmt KWWHILE LB expr RB SM ;
+
+breakstmt : KWBRK SM ;
+
+continuestmt : KWCONT SM ;
+
+rtnstmt : KWRTN (expr)? SM ;
+
+callstmt : funccall SM ;
+
+blockstmt : LCB blkbodylist RCB ;
+
+blkbodylist : bodydecl blkbodylist | ;
+
+exprlist : expr exprs | expr ;
 
 exprs : CM expr exprs | ;
 
@@ -225,36 +230,12 @@ expr6 : SUBOP expr6 | operand ;
 
 //expr7 : expr7 idxop | operand ;
 
-operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID idxop? | funccall | subexpr | subarr ;
+operand: LITINT | LITFLOAT | LITBOO | LITSTR | ID idxop? | funccall | subexpr | litarr ;
 
 idxop : LSB idxlist RSB ;
 
-funccall : (specialfunc | ID) LB exprlist RB ;
+funccall : (specialfunc | ID) LB exprlist? RB ;
+
+specialfunc : 'readInteger' | 'printInteger' | 'readFloat' | 'writeFloat' | 'readBoolean' | 'printBoolean' | 'readString' | 'printString' | 'super' | 'preventDefault' ;
 
 subexpr : LB expr RB ;
-
-subarr : LCB exprlist RCB ;
-
-ifstmt : matchstmt | unmatchstmt ;
-
-matchstmt : KWIF LB expr RB matchstmt KWELSE matchstmt | stmt ;
-
-unmatchstmt : KWIF LB expr RB ifstmt |  KWIF LB expr RB matchstmt KWELSE unmatchstmt ;
-
-forstmt : KWFOR LB ID EQL expr CM expr CM expr RB stmt ;
-
-whilestmt : KWWHILE LB expr RB stmt ;
-
-dowhilestmt : KWDO blockstmt KWWHILE LB expr RB SM ;
-
-breakstmt : KWBRK SM ;
-
-continuestmt : KWCONT SM ;
-
-rtnstmt : KWRTN (expr)? SM ;
-
-callstmt : funccall SM ;
-
-blockstmt : LCB bodylist RCB ;
-
-specialfunc : SFREADINT | SFPRINTINT | SFREADFLOAT | SFPRINTFLOAT | SFREADBOOL | SFPRINTBOOL | SFREADSTR | SFPRINTSTR | SFSUPER | SFPREVENT ;
