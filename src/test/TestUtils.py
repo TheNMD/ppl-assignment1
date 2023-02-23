@@ -100,12 +100,11 @@ class TestParser:
             parser.program()
             dest.write("successful")
         except SyntaxException as f:
-            pass
-#             dest.write(f.message)
-#         except Exception as e:
-#             dest.write(str(e))
-#         finally:
-#             dest.close()
+            dest.write(f.message)
+        except Exception as e:
+            dest.write(str(e))
+        finally:
+            dest.close()
 
 
 # class TestAST:

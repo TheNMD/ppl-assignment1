@@ -44,6 +44,11 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MT22Parser#middle.
+    def visitMiddle(self, ctx:MT22Parser.MiddleContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MT22Parser#vartyp.
     def visitVartyp(self, ctx:MT22Parser.VartypContext):
         return self.visitChildren(ctx)
@@ -56,11 +61,6 @@ class MT22Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MT22Parser#idxs.
     def visitIdxs(self, ctx:MT22Parser.IdxsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#idx.
-    def visitIdx(self, ctx:MT22Parser.IdxContext):
         return self.visitChildren(ctx)
 
 
@@ -94,8 +94,18 @@ class MT22Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MT22Parser#bodydecl.
-    def visitBodydecl(self, ctx:MT22Parser.BodydeclContext):
+    # Visit a parse tree produced by MT22Parser#bodylistvoid.
+    def visitBodylistvoid(self, ctx:MT22Parser.BodylistvoidContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#bodies.
+    def visitBodies(self, ctx:MT22Parser.BodiesContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MT22Parser#body.
+    def visitBody(self, ctx:MT22Parser.BodyContext):
         return self.visitChildren(ctx)
 
 
@@ -161,11 +171,6 @@ class MT22Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MT22Parser#blockstmt.
     def visitBlockstmt(self, ctx:MT22Parser.BlockstmtContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MT22Parser#blkbodylist.
-    def visitBlkbodylist(self, ctx:MT22Parser.BlkbodylistContext):
         return self.visitChildren(ctx)
 
 

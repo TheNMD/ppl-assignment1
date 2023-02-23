@@ -153,20 +153,23 @@ declist : decl declist | decl ;
 decl : vardecl | funcdecl ;
 
 vardecl : idlist CL vartyp SM 
-		| idlist CL (vartyp | KWAUTO) EQL exprlist SM 
+		| ID middle expr SM 
  		| idlist CL KWARR LSB idxlist RSB KWOF vartyp (EQL litarr)? SM ;
 
 idlist : ID ids | ID ;
 
 ids : CM ID ids | ;
 
+middle : CM ID middle expr CM | CL (vartyp | KWAUTO) EQL ;
+
 vartyp : KWINT | KWFLOAT | KWBOO | KWSTR ;
 
-idxlist : LITINT idxs | idx {self.text = self.text.replace('_','')} ;
+idxlist : LITINT idxs | LITINT {self.text = self.text.replace('_','')} ;
 
 idxs : CM LITINT idxs | {self.text = self.text.replace('_','')} ;
 
-funcdecl : ID CL KWFUNC functyp LB paralist RB (KWINHERIT ID)? LCB bodylist RCB ;
+funcdecl : ID CL KWFUNC (functyp | KWAUTO) LB paralist RB (KWINHERIT ID)? LCB bodylist RCB
+		 | ID CL KWFUNC KWVOID LB paralist RB (KWINHERIT ID)? LCB bodylistvoid RCB ;
 
 paralist : para paras | ;
 
@@ -174,9 +177,11 @@ paras : CM para paras | ;
 
 para :  KWINHERIT? KWOUT? ID CL vartyp ;
 
-functyp :  KWINT | KWFLOAT | KWBOO | KWSTR | KWAUTO | KWVOID ;
+functyp :  KWINT | KWFLOAT | KWBOO | KWSTR ;
 
 bodylist : body bodies | rtnstmt ;
+
+bodylistvoid : body bodies | ;
 
 bodies : body bodies | ;
 
@@ -206,9 +211,7 @@ rtnstmt : KWRTN (expr)? SM ;
 
 callstmt : funccall SM ;
 
-blockstmt : LCB blkbodylist RCB ;
-
-blkbodylist : bodydecl blkbodylist | ;
+blockstmt : LCB bodylistvoid RCB ;
 
 exprlist : expr exprs | expr ;
 
