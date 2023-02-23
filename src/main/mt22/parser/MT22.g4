@@ -126,15 +126,13 @@ LITINT : '0' | [1-9][0-9_]* {self.text = self.text.replace('_','')} ;
 
 LITFLOAT : LITINT Decimal? Exponent?  {self.text = self.text.replace('_','')} ;
 
-fragment Decimal : '.'[0-9]* ;
+fragment Decimal : DOT [0-9]* ;
 
-fragment Exponent : [eE][+-]?[0-9]+ ;
+fragment Exponent : [eE] [+-]? [0-9]+ ;
 
 LITBOO : KWTRUE | KWFALSE ;
 
 LITSTR : '"' ('\\' [bfrnt'\\"] | ~[\b\f\r\n\t'\\"])* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
-
-litarr : LCB exprlist? RCB ;
 
 ERROR_CHAR: .{raise ErrorToken(self.text)};
 
@@ -152,9 +150,10 @@ declist : decl declist | decl ;
 
 decl : vardecl | funcdecl ;
 
-vardecl : idlist CL vartyp SM 
+vardecl : idlist CL vartyp SM
 		| ID middle expr SM 
- 		| idlist CL KWARR LSB idxlist RSB KWOF vartyp (EQL litarr)? SM ;
+		| idlist CL KWARR LSB idxlist RSB KWOF vartyp SM
+		| ID middlearr litarr SM ;
 
 idlist : ID ids | ID ;
 
@@ -162,14 +161,18 @@ ids : CM ID ids | ;
 
 middle : CM ID middle expr CM | CL (vartyp | KWAUTO) EQL ;
 
+middlearr : CM ID middlearr litarr CM | CL KWARR LSB idxlist RSB KWOF vartyp EQL ;
+
+litarr : LCB exprlist? RCB ;
+
 vartyp : KWINT | KWFLOAT | KWBOO | KWSTR ;
 
-idxlist : LITINT idxs | LITINT {self.text = self.text.replace('_','')} ;
+idxlist : LITINT idxs | LITINT ;
 
-idxs : CM LITINT idxs | {self.text = self.text.replace('_','')} ;
+idxs : CM LITINT idxs | ;
 
 funcdecl : ID CL KWFUNC (functyp | KWAUTO) LB paralist RB (KWINHERIT ID)? LCB bodylist RCB
-		 | ID CL KWFUNC KWVOID LB paralist RB (KWINHERIT ID)? LCB bodylistvoid RCB ;
+		 | ID CL KWFUNC KWVOID LB paralist RB (KWINHERIT ID)? LCB bodylist RCB ;
 
 paralist : para paras | ;
 
@@ -179,11 +182,9 @@ para :  KWINHERIT? KWOUT? ID CL vartyp ;
 
 functyp :  KWINT | KWFLOAT | KWBOO | KWSTR ;
 
-bodylist : body bodies | rtnstmt ;
+bodylist : body bodylist | ;
 
-bodylistvoid : body bodies | ;
-
-bodies : body bodies | ;
+//bodylistvoid : body bodylistvoid | ;
 
 body : vardecl | stmt | ifstmt ;
 
@@ -211,7 +212,7 @@ rtnstmt : KWRTN (expr)? SM ;
 
 callstmt : funccall SM ;
 
-blockstmt : LCB bodylistvoid RCB ;
+blockstmt : LCB bodylist RCB ;
 
 exprlist : expr exprs | expr ;
 

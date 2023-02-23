@@ -1,1 +1,1 @@
- a : string = "213123213\'" ;  
+xyxx : array [2] of string ;
