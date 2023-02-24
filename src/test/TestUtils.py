@@ -8,10 +8,10 @@ if os.path.isdir('../target/main/mt22/parser') and not '../target/main/mt22/pars
     sys.path.append('../target/main/mt22/parser/')
 from MT22Lexer import MT22Lexer
 from MT22Parser import MT22Parser
-# from lexererr import *
-# import subprocess
+from lexererr import *
+import subprocess
 
-# JASMIN_JAR = "./external/jasmin.jar"
+JASMIN_JAR = "./external/jasmin.jar"
 TEST_DIR = "./test/testcases/"
 SOL_DIR = "./test/solutions/"
 Lexer = MT22Lexer

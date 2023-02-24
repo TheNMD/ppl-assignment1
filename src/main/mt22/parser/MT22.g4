@@ -3,6 +3,7 @@ grammar MT22;
 @lexer::header {
 from lexererr import *;
 studentID = "2052932";
+studentName = "Nguyen Manh Dan";
 }
 
 options{
@@ -12,7 +13,6 @@ options{
 //==========================================================
 // Lexer Rules
 //==========================================================
-
 // Whitespace
 WS : [ \t\n\r\f\b]+ -> skip ;
 
@@ -132,13 +132,9 @@ fragment Exponent : [eE] [+-]? [0-9]+ ;
 
 LITBOO : KWTRUE | KWFALSE ;
 
-LITSTR : '"' ('\\' [bfrnt'\\"] | ~[\b\f\r\n\t'\\"])* '"' {self.text = self.text.replace('"','')} {self.text = self.text.replace('\\','\\"')}  ;
+LITSTR : '"' Char* '"' {self.text = self.text[1:-1]}  ;
 
-ERROR_CHAR: .{raise ErrorToken(self.text)};
-
-NCLOSE_STRING: .{raise ErrorToken(self.text)};
-
-ILLEGAL_ESCAPE: .{raise ErrorToken(self.text)};
+fragment Char : ('\\' [bfrnt'\\"] | ~[\n\\"]) ; 
 
 //==========================================================
 // Parser Rules
@@ -243,3 +239,10 @@ funccall : (specialfunc | ID) LB exprlist? RB ;
 specialfunc : 'readInteger' | 'printInteger' | 'readFloat' | 'writeFloat' | 'readBoolean' | 'printBoolean' | 'readString' | 'printString' | 'super' | 'preventDefault' ;
 
 subexpr : LB expr RB ;
+
+// ERROR TOKENS
+ILLEGAL_ESCAPE: '"' Char* ('\\' ~[bfrnt'\\"]) {self.text = self.text[1:]; raise IllegalEscape(self.text)};
+
+UNCLOSED_STRING: '"' Char* {self.text = self.text[1:]; raise UncloseString(self.text)};
+
+ERROR_CHAR: . {raise ErrorToken(self.text)};

@@ -259,7 +259,7 @@ class MT22Parser ( Parser ):
                       "LEQLOP", "SMALLOP", "SEQLOP", "CONCATOP", "DOT", 
                       "CM", "SM", "CL", "LB", "RB", "LSB", "RSB", "LCB", 
                       "RCB", "EQL", "LITINT", "LITFLOAT", "LITBOO", "LITSTR", 
-                      "ERROR_CHAR", "NCLOSE_STRING", "ILLEGAL_ESCAPE" ]
+                      "ILLEGAL_ESCAPE", "UNCLOSED_STRING", "ERROR_CHAR" ]
 
     RULE_program = 0
     RULE_declist = 1
@@ -384,9 +384,9 @@ class MT22Parser ( Parser ):
     LITFLOAT=63
     LITBOO=64
     LITSTR=65
-    ERROR_CHAR=66
-    NCLOSE_STRING=67
-    ILLEGAL_ESCAPE=68
+    ILLEGAL_ESCAPE=66
+    UNCLOSED_STRING=67
+    ERROR_CHAR=68
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)

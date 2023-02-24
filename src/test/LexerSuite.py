@@ -15,3 +15,8 @@ class LexerSuite(unittest.TestCase):
         self.assertTrue(TestLexer.test("\t\b\n\f", "<EOF>", 109))
         self.assertTrue(TestLexer.test("4aaaaxxx__33//randomcomment", "4,aaaaxxx__33,<EOF>", 110))
         self.assertTrue(TestLexer.test("ooppxxew/*randomcomment*/122311123", "ooppxxew,122311123,<EOF>", 111))
+        self.assertTrue(TestLexer.test(""" "aasdasdxx""", "Unclosed String: aasdasdxx", 112))
+        self.assertTrue(TestLexer.test(""" "aasdasdxx\\nsds" """, "aasdasdxx\\nsds,<EOF>", 113))
+        self.assertTrue(TestLexer.test("ab?cd", "ab,Error Token ?", 114))
+        self.assertTrue(TestLexer.test("a : integer = ?", "a,:,integer,=,Error Token ?", 115))
+        self.assertTrue(TestLexer.test(""" "abc"" """, "", 116))
